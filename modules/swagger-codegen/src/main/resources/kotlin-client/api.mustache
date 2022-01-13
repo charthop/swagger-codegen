@@ -29,7 +29,12 @@ class {{classname}}(basePath: kotlin.String = "{{{basePath}}}", baseHeaders: Map
         }
         {{/queryParams}}
 
+        {{#hasConsumes}}
+        val contentHeaders: kotlin.collections.Map<kotlin.String,kotlin.String> = mapOf({{#hasFormParams}}"Content-Type" to {{#consumes}}"{{{mediaType}}}"{{/consumes}}{{/hasFormParams}})
+        {{/hasConsumes}}
+        {{^hasConsumes}}
         val contentHeaders: kotlin.collections.Map<kotlin.String,kotlin.String> = mapOf({{#hasFormParams}}"Content-Type" to "multipart/form-data"{{/hasFormParams}})
+        {{/hasConsumes}}
         val acceptsHeaders: kotlin.collections.Map<kotlin.String,kotlin.String> = mapOf({{#hasProduces}}"Accept" to "{{#produces}}{{#isContainer}}{{mediaType}}.joinToString(separator = collectionDelimiter("{{collectionFormat}}"){{/isContainer}}{{^isContainer}}{{mediaType}}{{/isContainer}}{{#hasMore}}, {{/hasMore}}{{/produces}}"{{/hasProduces}})
         val localVariableHeaders: kotlin.collections.MutableMap<kotlin.String,kotlin.String?> = mutableMapOf({{#hasHeaderParams}}{{#headerParams}}"{{baseName}}" to {{#isContainer}}{{paramName}}.joinToString(separator = collectionDelimiter("{{collectionFormat}}"){{/isContainer}}{{^isContainer}}{{paramName}}{{/isContainer}}{{#hasMore}}, {{/hasMore}}{{/headerParams}}{{/hasHeaderParams}})
         localVariableHeaders.putAll(contentHeaders)
